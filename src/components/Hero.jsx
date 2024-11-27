@@ -1,14 +1,72 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { PROFILE } from "../constants";
 import { RiArrowRightUpLine } from "@remixicon/react";
 import david from "../assets/David.webp";
+import { gsap } from "gsap";
 
 const Hero = () => {
   const heroRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.out", duration: 0.6 },
+      });
+
+      tl.from(".hero-title", {
+        opacity: 0,
+        y: -50,
+        scale: 0.95,
+        duration: 1.1,
+        stagger: 0.15,
+      })
+        .from(
+          ".hero-subheading",
+          {
+            opacity: 0,
+            y: 50,
+            scale: 0.95,
+            duration: 0.8,
+          },
+          "-=0.4"
+        )
+        .from(
+          ".hero-text",
+          {
+            opacity: 0,
+            y: 30,
+            duration: 0.7,
+          },
+          "-=0.4"
+        )
+        .from(
+          ".hero-btn",
+          {
+            opacity: 0,
+            scale: 0.9,
+            duration: 0.7,
+          },
+          "-=0.3"
+        )
+        .from(
+          ".hero-img",
+          {
+            opacity: 0,
+            y: 100,
+            scale: 0.9,
+            duration: 0.8,
+          },
+          "-=0.5"
+        );
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
       className="flex min-h-screen flex-col items-center justify-center gap-4 lg:gap-6"
-      rel={heroRef}
+      ref={heroRef}
     >
       <div className="mt-8 lg:mt-20">
         <h1 className="hero-title text-4xl uppercase lg:text-7xl">
@@ -36,7 +94,7 @@ const Hero = () => {
         alt={PROFILE.name}
         width={400}
         height="400"
-        className="hero-img rounded-3xl border border-purple-300/20 p-1"
+        className="hero-img rounded-full border border-purple-300/20 p-1"
       />
     </section>
   );
